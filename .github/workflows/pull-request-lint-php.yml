@@ -1,0 +1,36 @@
+name: PHP Syntax Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.php'
+
+jobs:
+  Lint_changed_PHP_files:
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+        with:
+          # Needed to diff with parent commit
+          fetch-depth: 2
+
+      - name: Copy changed PHP files
+        run: |
+          mkdir lint
+          git diff -z --name-only --diff-filter=AM HEAD^ -- '*.php' | xargs -0 cp --parents -t ./lint
+
+      - name: Files to lint
+        run: |
+          cd ./lint
+          find . -type f -print
+
+      - name: PHP Syntax Checker (Lint)
+        uses: StephaneBour/actions-php-lint@7.4
+        with:
+          dir: './lint'
+
