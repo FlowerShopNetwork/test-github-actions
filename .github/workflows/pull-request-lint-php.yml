@@ -4,15 +4,14 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - '**.php'
+#    paths:
+#      - '**.php'
 
 jobs:
   Lint_changed_PHP_files:
     runs-on: ubuntu-24.04
 
     steps:
-
       - name: Checkout pull request
         uses: actions/checkout@v4
         with:
